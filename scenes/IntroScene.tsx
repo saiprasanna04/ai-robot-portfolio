@@ -1,5 +1,6 @@
 "use client";
-
+import HumanHand from "../components/HumanHand"
+import RobotHand from "../components/RobotHand"
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
 import { useRef } from "react";
@@ -34,20 +35,20 @@ function EnergyWave() {
 
   const ref = useRef<any>()
 
-  useFrame(({ clock }) => {
+  useFrame((state) => {
 
-    const t = clock.getElapsedTime()
+  if (!ref.current) return
 
-    const scale = 1 + t % 3
+  const t = state.clock.getElapsedTime()
+  const scale = 1 + (t % 3)
 
-    ref.current.scale.set(scale, scale, scale)
+  ref.current.scale.set(scale, scale, scale)
 
-  })
-
+})
   return (
-    <mesh ref={ref} rotation={[Math.PI / 2, 0, 0]}>
-      <ringGeometry args={[1.5, 1.7, 64]} />
-      <meshBasicMaterial color="cyan" wireframe />
+    <mesh position={[0,0,0]}>
+      <sphereGeometry args={[0.2,32,32]} />
+      <meshStandardMaterial emissive="orange" emissiveIntensity={4} color="black" />
     </mesh>
   )
 
@@ -70,6 +71,8 @@ export default function IntroScene() {
 
       <EnergyCore />
       <EnergyWave />
+      <HumanHand />
+      <RobotHand />
 
       <OrbitControls enableZoom={false} />
 
